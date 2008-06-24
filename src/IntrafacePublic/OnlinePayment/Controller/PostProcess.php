@@ -8,7 +8,13 @@ class IntrafacePublic_OnlinePayment_Controller_PostProcess extends k_Controller
 {
     
     
-    public function POST() {
+    public function GET() 
+    {
+        return $this->POST();
+    }
+    
+    public function POST() 
+    {
         
         $onlinepayment = $this->registry->get('onlinepayment');
         
@@ -22,7 +28,7 @@ class IntrafacePublic_OnlinePayment_Controller_PostProcess extends k_Controller
         
         $postprocess = $this->registry->get('onlinepayment:payment_html')->getPostProcess();
         
-        if($postprocess->setPaymentResponse($this->POST->getArrayCopy())) {
+        if($postprocess->setPaymentResponse($this->POST->getArrayCopy(), $this->GET->getArrayCopy(), $this->registry->get("k_http_Session")->get(), $payment_target)) {
             try {
                 $onlinepayment->saveOnlinePayment(
                     $this->context->name, 
@@ -31,7 +37,7 @@ class IntrafacePublic_OnlinePayment_Controller_PostProcess extends k_Controller
                     $postprocess->getAmount());
             }
             catch(Exception $e) {
-                
+                throw $e;
             }
         }
         else {
