@@ -36,7 +36,7 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
         
         
         // if no slashes in destination it is local.
-        if(!strpos('/', $prepare->getPostDestination())) {
+        if(!strpos($prepare->getPostDestination(), '/')) {
             $destination = $this->url($prepare->getPostDestination());
         }
         else {
