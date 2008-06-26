@@ -18,7 +18,14 @@ class IntrafacePublic_OnlinePayment_Controller_Input extends k_Controller
         $data['ok_url'] = $this->context->context->getOkUrl();
         $data['error_url'] = $this->url('../', array('error' => 1));
         $data['postprocess_url'] = $this->url('../postprocess');
-        
+        $data['secure_tunnel_url'] = $input->getSecureTunnelUrl();
+        $data['creditcard_logos'] = array(
+                array('url' => $this->url('/images/creditcard-logo/dan-xs.gif'), 'width' => '32', 'height' => '18'),
+                array('url' => $this->url('/images/creditcard-logo/visa-xs.gif'), 'width' => '32', 'height' => '20'),
+                array('url' => $this->url('/images/creditcard-logo/elec-xs.gif'), 'width' => '32', 'height' => '20'),
+                array('url' => $this->url('/images/creditcard-logo/mc-xs.gif'), 'width' => '32', 'height' => '22'),
+                array('url' => $this->url('/images/creditcard-logo/maestro-xs.gif'), 'width' => '32', 'height' => '20'),
+                array('url' => $this->url('/images/creditcard-logo/jcb-xs.gif'), 'width' => '19', 'height' => '24'));
         
         $response = $this->render('IntrafacePublic/OnlinePayment/templates/payment-input-container-tpl.php', array('content' => $this->render($template, $data)));
         
