@@ -15,11 +15,9 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
     function GET()
     {
         $onlinepayment = $this->registry->get('onlinepayment');
-        
         try {
             $payment_target = $onlinepayment->getPaymentTarget($this->name);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
         
@@ -34,12 +32,10 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
             $this->url('./input'));
         
         
-        
         // if no slashes in destination it is local.
         if(!strpos($prepare->getPostDestination(), '/')) {
             $destination = $this->url($prepare->getPostDestination());
-        }
-        else {
+        } else {
             $destination = $prepare->getPostDestination();
         }
         
@@ -52,8 +48,7 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
 
         if(!empty($this->GET['error'])) {
             return $forward = $this->render('IntrafacePublic/OnlinePayment/templates/payment-error-tpl.php', $data);
-        }
-        else {
+        } else {
             return $forward = $this->render('IntrafacePublic/OnlinePayment/templates/payment-forward-tpl.php', $data);
         }
     }

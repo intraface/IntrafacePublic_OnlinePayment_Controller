@@ -13,7 +13,6 @@ class IntrafacePublic_OnlinePayment_Controller_Index extends k_Controller
         return $this->url('./receipt');
     }
 
-
     function GET()
     {
         throw new Exception('You need to specify an order to pay!');
