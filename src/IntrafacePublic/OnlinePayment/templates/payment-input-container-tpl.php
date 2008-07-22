@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="da" xml:lang="da">
 <head>
     <title><?php e(__('Payment')); ?></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=<?php e($encoding); ?>" />
+    <meta http-equiv="Content-Type" content="text/html; charset=<?php e($this->document->encoding); ?>" />
     <style type="text/css">
         body { 
             font-family: Verdana, sans-serif; 
@@ -47,16 +47,19 @@
         }
         
         div#cards_container {
-            padding: 0.5em;
+            padding: 0.5em 0;
+            margin-bottom: 1em;              
         }
         
         div#cards_container img {
             padding: 0em 0.2em;
+          
         }
         
         p.cards {
             display: inline;
-            margin-left: 1em;
+            margin-right: 1em;
+
         }
        
     </style>
@@ -67,4 +70,4 @@
         <?php echo $content; ?>
     </div>
 </body>
-</html> 
+</html>
