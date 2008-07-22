@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="da" xml:lang="da">
 <head>
     <title><?php e(__('Payment')); ?></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=<?php e($encoding); ?>" />
     <style type="text/css">
         body { 
             font-family: Verdana, sans-serif; 
