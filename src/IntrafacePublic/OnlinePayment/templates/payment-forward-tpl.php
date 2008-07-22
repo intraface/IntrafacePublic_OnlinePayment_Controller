@@ -7,7 +7,7 @@
     
         <?php echo $input_fields; ?>
     
-        <p id="purchase-continue"><input id="buy" type="submit" name="pay" value="<?php e(t('Continue')); ?>" /></p>
+        <p id="purchase-continue"><input type="submit" name="pay" value="<?php e(t('Continue')); ?>" /></p>
     
     </form>
 </div>
