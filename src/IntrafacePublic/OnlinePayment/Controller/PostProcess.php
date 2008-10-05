@@ -28,6 +28,7 @@ class IntrafacePublic_OnlinePayment_Controller_PostProcess extends k_Controller
                     $this->context->name, 
                     $postprocess->getTransactionNumber(),
                     $postprocess->getTransactionStatus(),
+                    $postprocess->getPbsStatus(),
                     $postprocess->getAmount());
             } catch(Exception $e) {
                 throw $e;
