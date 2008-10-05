@@ -31,6 +31,8 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
         
         $data['input_fields'] = $prepare->getPostFields();
         $data['post_action'] =  $destination;
+        $data['order_number'] =  $payment_target['number'];
+        $data['date'] =  $payment_target['this_date'];
         $data['target_type'] = $payment_target['type'];
         $data['total_price'] = $payment_target['arrears'];
         $data['payment_provider'] = $prepare->getProviderName();
