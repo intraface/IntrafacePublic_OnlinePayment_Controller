@@ -1,5 +1,4 @@
 <?php
-
 class IntrafacePublic_OnlinePayment_Controller_Index extends k_Controller
 {
     private $error = array();

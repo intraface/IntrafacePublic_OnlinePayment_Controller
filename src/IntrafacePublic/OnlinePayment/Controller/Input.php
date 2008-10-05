@@ -31,7 +31,4 @@ class IntrafacePublic_OnlinePayment_Controller_Input extends k_Controller
         
         throw new k_http_Response(200, $response);
     }
-
 }
-
-?>
