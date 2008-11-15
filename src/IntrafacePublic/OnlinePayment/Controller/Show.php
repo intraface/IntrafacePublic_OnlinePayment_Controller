@@ -14,8 +14,8 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
         
         $prepare = $this->registry->get('onlinepayment:payment_html')->getPrepare();
         $prepare->setPaymentValues($payment_target['id'], 
-            $payment_target['arrears'],
-            'DKK',
+            $payment_target['arrears'][$payment_target['default_currency']],
+            $payment_target['default_currency'],
             'DK',
             $this->context->getOkUrl(),
             $this->url('.', array('error' => 1)),
@@ -34,7 +34,8 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
         $data['order_number'] =  $payment_target['number'];
         $data['date'] =  $payment_target['this_date'];
         $data['target_type'] = $payment_target['type'];
-        $data['total_price'] = $payment_target['arrears'];
+        $data['total_price'] = $payment_target['arrears'][$payment_target['default_currency']];
+        $data['currency'] = $payment_target['default_currency'];
         $data['payment_provider'] = $prepare->getProviderName();
         $data['error'] = $this->error;
 
