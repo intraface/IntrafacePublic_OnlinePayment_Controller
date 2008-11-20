@@ -14,7 +14,7 @@
         </tr>
         <tr>
             <th><?php e(__('Amount')); ?></th>
-            <td> <?php e($currency.' '.number_format($total_price, 2, ',', '.')); ?></td>
+            <td><?php e($currency.' '.number_format($total_price, 2, ',', '.')); ?></td>
         </tr>  
         </tbody>               
     </table>
