@@ -8,7 +8,7 @@
     <?php endif; ?>
         
     <p><?php e(__('Try again, or contact us.')); ?></p>
-    <p><?php e(__('Try again to pay your')); ?> <?php e($target_type); ?> <strong>DKK <?php e($total_price); ?></strong>.</p>
+    <p><?php e(__('Try again to pay your')); ?> <?php e($target_type); ?> <strong><?php e($currency.' '.number_format($total_price, 2, ',', '.')); ?></strong>.</p>
 
     <form method="POST" action="<?php e($post_action); ?>">
     
