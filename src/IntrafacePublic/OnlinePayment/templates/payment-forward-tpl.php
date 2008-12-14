@@ -15,17 +15,15 @@
         <tr>
             <th><?php e(__('Amount')); ?></th>
             <td><?php e($currency.' '.number_format($total_price, 2, ',', '.')); ?></td>
-        </tr>  
-        </tbody>               
+        </tr>
+        </tbody>
     </table>
 
     <p><?php e(__('The payment is made through a secure payment server provided by')); ?> <?php e($payment_provider); ?></p>
-    
+
     <form method="POST" action="<?php e($post_action); ?>">
-    
         <?php echo $input_fields; ?>
-    
-        <p id="purchase-continue"><input type="submit" name="pay" value="<?php e(t('Continue')); ?>" /></p>
-    
+        <p id="purchase-continue"><input type="submit" name="pay" id="submit" value="<?php e(t('Continue')); ?>" /></p>
     </form>
+
 </div>

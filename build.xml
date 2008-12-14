@@ -47,6 +47,7 @@
             <lead user="lsolesen" name="Lars Olesen" email="lars@legestue.net" />
             <lead user="sune.t.jensen" name="Sune Jensen" email="sj@sunet.dk" />
             <license>LGPL</license>
+        	<dirroles key="images">web</dirroles>
             <version release="${version}" api="${version}" />
             <stability release="${stability}" api="${stability}" />
             <dependencies>
