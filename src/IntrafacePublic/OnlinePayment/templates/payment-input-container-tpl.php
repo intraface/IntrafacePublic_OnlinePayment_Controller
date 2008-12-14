@@ -10,6 +10,7 @@
 	margin: auto;
 }
 #step4 #outer{width:585px}
+/*
 #step4 h1,#step4 h1 a{
     width:121px;
     height:66px;
@@ -17,6 +18,7 @@
     position:relative;
     display:block;
 }
+*/
 #step4 h1{margin:10px 0}
 #step4 h1 em{
     position:absolute;
@@ -129,6 +131,8 @@ input.godkend{
 <div id="outer">
     <?php if (!empty($this->document->company_name)): ?>
         <h1><a href="#"><?php e($this->document->company_name); ?><em></em></a></h1>
+    <?php else: ?>
+        <h1><?php e(__('Online payment')); ?></h1>
     <?php endif; ?>
         <?php echo $content; ?>
         <div class="s4base">
