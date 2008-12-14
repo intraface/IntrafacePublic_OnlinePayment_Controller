@@ -31,4 +31,33 @@ class IntrafacePublic_OnlinePayment_Controller_Input extends k_Controller
 
         throw new k_http_Response(200, $response);
     }
+
+    function getCompanyInformation()
+    {
+    	return $this->context->getCompanyInformation();
+    }
+
+    function getCompanyName()
+    {
+        $data = $this->getCompanyInformation();
+        return $data['name'];
+    }
+
+    function getCompanyAddress()
+    {
+        $data = $this->getCompanyInformation();
+        return $data['address'];
+    }
+
+    function getCompanyZip()
+    {
+        $data = $this->getCompanyInformation();
+        return $data['postalcode'] . ' ' . $data['city'];
+    }
+
+    function getCompanyVatNumber()
+    {
+        $data = $this->getCompanyInformation();
+        return $data['cvr'];
+    }
 }

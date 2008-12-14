@@ -11,9 +11,9 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
         } catch (Exception $e) {
             throw $e;
         }
-        
+
         $prepare = $this->registry->get('onlinepayment:payment_html')->getPrepare();
-        $prepare->setPaymentValues($payment_target['id'], 
+        $prepare->setPaymentValues($payment_target['id'],
             $payment_target['arrears'][$payment_target['default_currency']],
             $payment_target['default_currency'],
             'DK',
@@ -21,14 +21,14 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
             $this->url('.', array('error' => 1)),
             $this->url('./postprocess'),
             $this->url('./input'));
-        
+
         // if no slashes in destination it is local.
         if (!strpos($prepare->getPostDestination(), '/')) {
             $destination = $this->url($prepare->getPostDestination());
         } else {
             $destination = $prepare->getPostDestination();
         }
-        
+
         $data['input_fields'] = $prepare->getPostFields();
         $data['post_action'] =  $destination;
         $data['order_number'] =  $payment_target['number'];
@@ -45,8 +45,8 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
             return $forward = $this->render('IntrafacePublic/OnlinePayment/templates/payment-forward-tpl.php', $data);
         }
     }
-    
-    public function forward($name) 
+
+    public function forward($name)
     {
         // The provider payment server makes an http post call to the postprocess page.
         // This page then adds the payment to intraface.
@@ -54,26 +54,31 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
             $next = new IntrafacePublic_OnlinePayment_Controller_PostProcess($this, $name);
             return $next->handleRequest();
         }
-        
-        // The input page provides html input fields for the provider payment server. 
+
+        // The input page provides html input fields for the provider payment server.
         // The server gets the fields through a http call.
         if ($name == 'input') {
             $next = new IntrafacePublic_OnlinePayment_Controller_Input($this, $name);
             return $next->handleRequest();
         }
-        
+
         // Returns a confirmation that the payment was successfull
         if ($name == 'receipt') {
             $next = new IntrafacePublic_OnlinePayment_Controller_Receipt($this, $name);
             return $next->handleRequest();
         }
-        
+
         $prepare = $this->registry->get('onlinepayment:payment_html')->getPrepare();
         // if there is no slashes in post destination it must be a local server.
         if (!strpos('/', $prepare->getPostDestination()) && $name == $prepare->getPostDestination()) {
             $next = new Ilib_Payment_Html_Controller_Server($this, $name);
             return $next->handleRequest();
         }
+    }
+
+    function getCompanyInformation()
+    {
+        return $this->context->getCompanyInformation();
     }
 }
 
