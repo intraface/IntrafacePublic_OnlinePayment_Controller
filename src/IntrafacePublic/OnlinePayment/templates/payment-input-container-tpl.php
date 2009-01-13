@@ -140,7 +140,7 @@ input.godkend{
             <legend><span><?php e(__('Information on the card')); ?></span></legend>
             <h3><?php e(__('Where can I find the security number?')); ?></h3>
             <p><?php e(__('The security number can be found on the back of your card. The numbers can be placed in different places on different card types. The illustration below shows some different examples. The security number gives increased security when shopping online.')); ?></p>
-            <p class="security"><img src="<?php e(url('/images/securtity-num.jpg')); ?>" alt="<?php e(__('Security number')); ?>" width="450" height="108" /></p>
+            <p class="security"><img src="<?php e(url('/images/security-num.jpg')); ?>" alt="<?php e(__('Security number')); ?>" width="450" height="108" /></p>
             </fieldset>
         </div>
 </div>
