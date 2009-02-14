@@ -4,7 +4,7 @@
     <taskdef classname="phing.tasks.ext.IlibPearDeployerTask" name="peardeploy" />
 
     <property name="package-name" value="${phing.project.name}" />
-    <property name="version" value="0.4.0" />
+    <property name="version" value="0.4.1" />
     <property name="stability" value="alpha" />
     <property name="pear.channel" value="public.intraface.dk" />
 
@@ -55,7 +55,7 @@
                 <package name="IntrafacePublic_OnlinePayment" channel="public.intraface.dk" recommended_version="0.2.0" minimum_version="0.2.0" />
                 <package name="konstrukt" channel="public.intraface.dk" recommended_version="0.4.0" minimum_version="0.4.0" />
             </dependencies>
-            <notes>* New layout</notes>
+            <notes>* Fixed spelling for added file</notes>
         </d51pearpkg2>
     </target>
 
