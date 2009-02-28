@@ -27,7 +27,7 @@ class IntrafacePublic_OnlinePayment_Controller_Input extends k_Controller
                 array('url' => $this->url('/images/creditcard-logo/maestro-xs.gif'), 'width' => '32', 'height' => '20'),
                 array('url' => $this->url('/images/creditcard-logo/jcb-xs.gif'), 'width' => '19', 'height' => '24'));
 
-        $response = $this->render('IntrafacePublic/OnlinePayment/templates/payment-input-container-tpl.php', array('content' => $this->render($template, $data)));
+        $response = $this->render('IntrafacePublic/OnlinePayment/templates/payment-input-container-tpl.php', array('content' => $this->render($template, $data), 'secure_tunnel_url' => $input->getSecureTunnelUrl()));
 
         throw new k_http_Response(200, $response);
     }
