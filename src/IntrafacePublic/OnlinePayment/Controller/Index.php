@@ -12,20 +12,36 @@ class IntrafacePublic_OnlinePayment_Controller_Index extends k_Controller
         return $this->url('./receipt');
     }
 
-    function GET()
+    public function GET()
     {
         throw new Exception('You need to specify an order to pay!');
     }
 
-    public function forward($name)
+    public public function forward($name)
     {
         $next = new IntrafacePublic_OnlinePayment_Controller_Show($this, $name);
         return $next->handleRequest();
     }
 
-    function getCompanyInformation()
+    public function getCompanyInformation()
     {
     	return $this->context->getCompanyInformation();
+    }
+    
+    /**
+     * Return Ilib_Payment_Authorize
+     */
+    public function getOnlinePaymentAuthorize()
+    {
+        return $this->context->getOnlinePaymentAuthorize();
+    }
+    
+    /**
+     * Return IntrafacePublic_Onlinepayment
+     */
+    public function getOnlinePayment()
+    {
+        return $this->context->getOnlinePayment();
     }
 }
 

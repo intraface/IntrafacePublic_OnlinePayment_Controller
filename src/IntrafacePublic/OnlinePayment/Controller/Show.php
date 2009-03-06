@@ -55,10 +55,17 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
             return $next->handleRequest();
         }
 
-        // The input page provides html input fields for the provider payment server.
+        // The input page used for a secure tunnel providing html input fields for the provider payment server.
         // The server gets the fields through a http call.
         if ($name == 'input') {
             $next = new IntrafacePublic_OnlinePayment_Controller_Input($this, $name);
+            return $next->handleRequest();
+        }
+        
+        // The input page makes the post form to post to the payment server.
+        // The server gets the fields through a http call.
+        if ($name == 'postform') {
+            $next = new IntrafacePublic_OnlinePayment_Controller_PostForm($this, $name);
             return $next->handleRequest();
         }
 
@@ -74,6 +81,22 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
             $next = new Ilib_Payment_Html_Controller_Server($this, $name);
             return $next->handleRequest();
         }
+    }
+    
+    /**
+     * Return Ilib_Payment_Authorize
+     */
+    public function getOnlinePaymentAuthorize()
+    {
+        return $this->context->getOnlinePaymentAuthorize();
+    }
+    
+    /**
+     * Return IntrafacePublic_Onlinepayment
+     */
+    public function getOnlinePayment()
+    {
+        return $this->context->getOnlinePayment();
     }
 
     function getCompanyInformation()
