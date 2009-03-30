@@ -1,4 +1,4 @@
-<div id="errormessage"><?php if('' != ($errormessage = $prepare->getErrorMessage())) echo __('An error has occured, please try again').': '.__('An error has occured, please try again').': '.__($errormessage); ?></div>
+<div id="errormessage"><?php if('' != ($errormessage = $prepare->getErrorMessage())) echo __('An error has occured, please try again').': '.__($errormessage); ?></div>
 <div id="payment-forward">
     <p><?php e(__('You are now ready to pay the following ' . $target_type)); ?>:</p>
 
