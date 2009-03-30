@@ -1,8 +1,6 @@
 <?php
 /**
- * The input page provides html input fields for the provider payment server. 
- * The server gets the fields through a http call. 
- * To create custom page with payment input fields.
+ * The receipt page provides. 
  */
 class IntrafacePublic_OnlinePayment_Controller_Receipt extends k_Controller
 {

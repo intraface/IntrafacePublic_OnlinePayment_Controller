@@ -1,49 +1,41 @@
 <?php
 class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
 {
-    private $error = array();
-
+    
     function GET()
     {
-        $onlinepayment = $this->registry->get('onlinepayment');
+        $onlinepayment = $this->getOnlinePayment();
         try {
             $payment_target = $onlinepayment->getPaymentTarget($this->name);
         } catch (Exception $e) {
             throw $e;
         }
 
-        $prepare = $this->registry->get('onlinepayment:payment_html')->getPrepare();
-        $prepare->setPaymentValues($payment_target['id'],
+        $data['prepare'] = $this->getOnlinePaymentAuthorize()->getPrepare(
+            $this->name,
+            $payment_target['id'],
             $payment_target['arrears'][$payment_target['default_currency']],
             $payment_target['default_currency'],
             'DK',
             $this->context->getOkUrl(),
             $this->url('.', array('error' => 1)),
             $this->url('./postprocess'),
-            $this->url('./input'));
-
-        // if no slashes in destination it is local.
-        if (!strpos($prepare->getPostDestination(), '/')) {
-            $destination = $this->url($prepare->getPostDestination());
-        } else {
-            $destination = $prepare->getPostDestination();
-        }
-
-        $data['input_fields'] = $prepare->getPostFields();
-        $data['post_action'] =  $destination;
+            $this->url('./postform'),
+            $this->GET->getArrayCopy(),
+            $this->POST->getArrayCopy()
+        );
+        
         $data['order_number'] =  $payment_target['number'];
         $data['date'] =  $payment_target['this_date'];
         $data['target_type'] = $payment_target['type'];
         $data['total_price'] = $payment_target['arrears'][$payment_target['default_currency']];
-        $data['currency'] = $payment_target['default_currency'];
-        $data['payment_provider'] = $prepare->getProviderName();
-        $data['error'] = $this->error;
-
+       
         if (!empty($this->GET['error'])) {
-            return $forward = $this->render('IntrafacePublic/OnlinePayment/templates/payment-error-tpl.php', $data);
-        } else {
-            return $forward = $this->render('IntrafacePublic/OnlinePayment/templates/payment-forward-tpl.php', $data);
+            $data['error_message'] = $this->__('An error occured. Please try again');
         }
+        
+        return $this->render('IntrafacePublic/OnlinePayment/templates/payment-forward-tpl.php', $data);
+        
     }
 
     public function forward($name)
@@ -54,16 +46,8 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
             $next = new IntrafacePublic_OnlinePayment_Controller_PostProcess($this, $name);
             return $next->handleRequest();
         }
-
-        // The input page used for a secure tunnel providing html input fields for the provider payment server.
-        // The server gets the fields through a http call.
-        if ($name == 'input') {
-            $next = new IntrafacePublic_OnlinePayment_Controller_Input($this, $name);
-            return $next->handleRequest();
-        }
         
-        // The input page makes the post form to post to the payment server.
-        // The server gets the fields through a http call.
+        // The post form page makes the post form to post to the payment server.
         if ($name == 'postform') {
             $next = new IntrafacePublic_OnlinePayment_Controller_PostForm($this, $name);
             return $next->handleRequest();
@@ -74,17 +58,18 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
             $next = new IntrafacePublic_OnlinePayment_Controller_Receipt($this, $name);
             return $next->handleRequest();
         }
-
-        $prepare = $this->registry->get('onlinepayment:payment_html')->getPrepare();
-        // if there is no slashes in post destination it must be a local server.
-        if (!strpos('/', $prepare->getPostDestination()) && $name == $prepare->getPostDestination()) {
-            $next = new Ilib_Payment_Html_Controller_Server($this, $name);
+        
+        // A payment process'er  for testing.
+        if ($name == 'paymentprocess') {
+            $next = new IntrafacePublic_OnlinePayment_Controller_PaymentProcess($this, $name);
             return $next->handleRequest();
         }
     }
     
     /**
      * Return Ilib_Payment_Authorize
+     * 
+     * @return object Ilib_Payment_Authorize
      */
     public function getOnlinePaymentAuthorize()
     {
@@ -93,6 +78,8 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
     
     /**
      * Return IntrafacePublic_Onlinepayment
+     * 
+     * @return object IntrafacePublic_OnlinePayment
      */
     public function getOnlinePayment()
     {

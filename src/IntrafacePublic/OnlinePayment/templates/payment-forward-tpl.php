@@ -1,3 +1,4 @@
+<div id="errormessage"><?php if('' != ($errormessage = $prepare->getErrorMessage())) echo __('An error has occured, please try again').': '.__('An error has occured, please try again').': '.__($errormessage); ?></div>
 <div id="payment-forward">
     <p><?php e(__('You are now ready to pay the following ' . $target_type)); ?>:</p>
 
@@ -14,15 +15,15 @@
         </tr>
         <tr>
             <th><?php e(__('Amount')); ?></th>
-            <td><?php e($currency.' '.number_format($total_price, 2, ',', '.')); ?></td>
+            <td><?php e($prepare->getCurrency().' '.number_format($prepare->getAmount(), 2, ',', '.')); ?></td>
         </tr>
         </tbody>
     </table>
 
-    <p><?php e(__('The payment is made through a secure payment server provided by')); ?> <?php e($payment_provider); ?></p>
+    <p><?php e(__('The payment is made through a secure payment server provided by')); ?> <?php e($prepare->getProviderName()); ?></p>
 
-    <form method="POST" action="<?php e($post_action); ?>">
-        <?php echo $input_fields; ?>
+    <form method="POST" action="<?php $url = $prepare->getAction(); if(substr($url, 0, 7) != 'http://' && substr($url, 0, 8) != 'https://') $url = url($url); echo $url; ?>">
+        <?php echo $prepare->getHiddenFields(); ?>
         <p id="purchase-continue"><input type="submit" name="pay" id="submit" value="<?php e(t('Continue')); ?>" /></p>
     </form>
 

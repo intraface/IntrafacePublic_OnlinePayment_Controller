@@ -26,7 +26,6 @@
     height:66px;
     left:0;
     top:0;
-    background:url(<?php e('/images/logo.jpg'); ?>) no-repeat 0 0;
 }
 #step4 ul.steps{margin:7px auto 21px auto}
 .s4top{
@@ -69,7 +68,7 @@ input.inp115,input.inp27{
 }
 input.inp27{width:27px}
 input.godkend{
-    background:#4e8db8 url(<?php e('/images/but-tilb-god.gif'); ?>) no-repeat 0 0;
+    background:#4e8db8 url(<?php e($secure_tunnel.url('/images/but-tilb-god.gif')); ?>) no-repeat 0 0;
     width:78px;
     height:19px;
     overflow:visible;
@@ -122,6 +121,7 @@ input.godkend{
 .s4base p{margin:0 23px 25px}
 .s4base p.security{margin:0 23px;padding:0 0 8px}
 
+div.errormesssage {color: red;margin: 20px 0px 20px 0px; }
 </style>
 
 </head>
@@ -134,7 +134,8 @@ input.godkend{
     <?php else: ?>
         <h1><?php e(__('Online payment')); ?></h1>
     <?php endif; ?>
-        <form action="<?php echo $form->getAction(); ?>" method="post" autocomplete="off" id="payment_details">
+        <div class="errormesssage"><?php if('' != ($errormessage = $form->getErrorMessage())) echo __($errormessage); ?></div>
+        <form action="<?php $url = $form->getAction(); if(substr($url, 0, 7) != 'http://' && substr($url, 0, 8) != 'https://') $url = url('../'.$url); echo $url; ?>" method="post" autocomplete="off" id="payment_details">
             <?php echo $form->getHiddenFields(); ?>
 
 
@@ -144,7 +145,7 @@ input.godkend{
             <div class="s4-inner">
                 <div class="stop">
                     <label for="cardnum"><?php e(__('Card number')); ?></label>
-                    <input type="text" maxlength="16" size="19" name="CardNumber" id="cardnum" />
+                    <input type="text" maxlength="16" size="19" name="<?php echo $form->getCardNumberFieldName(); ?>" id="cardnum" />
                 </div>
                 <div>
                     <label for="month"><?php e(__('Expire date')); ?></label>
@@ -170,7 +171,7 @@ input.godkend{
                 </div>
                 <div>
                     <label for="cvd"><?php e(__('Security no.')); ?></label>
-                    <input type="text" maxlength="3" size="3" name="CardCVC" id="cvd" />
+                    <input type="text" maxlength="3" size="3" name="<?php echo $form->getSecurityNumberFieldName(); ?>" id="cvd" />
                 </div>
                 <div>
                     <input class="godkend" name="submit" type="submit" id="submit" value="<?php e(__('Pay')); ?>" />
@@ -186,15 +187,7 @@ input.godkend{
             <legend><span><?php e(__('Company')); ?></span></legend>
             <div class="s4-inner">
                 <p class="stop"><strong><span><?php e(__('Total amount')); ?></span></strong>
-                <?php
-                $currencies = array(
-                    '208' => 'DKK',
-                    '978' => 'EUR',
-                    '840' => 'USD');
-                if(isset($currencies[$request_get['CurrencyID']])) {
-                    echo $currencies[$request_get['CurrencyID']];
-                }
-                ?> %%Amount%%</p>
+                <?php echo $form->getCurrency().' '.$form->getAmount(); ?></p>
                 <!--
                 <p><strong><span><?php e(__('Order')); ?></span>xxx</strong></p>
                 -->
@@ -212,19 +205,19 @@ input.godkend{
                 <?php
                 if(isset($creditcard_logos) && is_array($creditcard_logos)) {
                     foreach($creditcard_logos as $logo) {
-                        echo '<img src="'.$secure_tunnel_url.$logo['url'].'" class="creditcard-logo" width="'.$logo['width'].'" height="'.$logo['height'].'" style="margin: 4px;" />';
+                        echo '<img src="'.$secure_tunnel.$logo['url'].'" class="creditcard-logo" width="'.$logo['width'].'" height="'.$logo['height'].'" style="margin: 4px;" />';
                     }
                 }
                 ?>
             </fieldset>
         </div>
-<br>
+        <br />
         <div class="s4base">
             <fieldset class="clearfix">
             <legend><span><?php e(__('Information on the card')); ?></span></legend>
             <h3><?php e(__('Where can I find the security number?')); ?></h3>
             <p><?php e(__('The security number can be found on the back of your card. The numbers can be placed in different places on different card types. The illustration below shows some different examples. The security number gives increased security when shopping online.')); ?></p>
-            <p class="security"><img src="<?php e($secure_tunnel_url.url('/images/security-num.jpg')); ?>" alt="<?php e(__('Security number')); ?>" width="450" height="108" /></p>
+            <p class="security"><img src="<?php e($secure_tunnel.url('/images/security-num.jpg')); ?>" alt="<?php e(__('Security number')); ?>" width="450" height="108" /></p>
             </fieldset>
         </div>
 </div>
