@@ -33,7 +33,7 @@ class IntrafacePublic_OnlinePayment_Controller_PostForm extends k_Controller
             $payment_target['default_currency'],
             'DK',
             $receipt_url, 
-            $this->url(NULL, array('error' => 1)), 
+            $this->url('../'), 
             $this->url('../postprocess'),
             $this->GET->getArrayCopy(),
             $this->POST->getArrayCopy()

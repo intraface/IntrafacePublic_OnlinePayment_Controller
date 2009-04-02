@@ -21,8 +21,8 @@ class IntrafacePublic_OnlinePayment_Controller_PostProcess extends k_Controller
         }
         
         $postprocess = $this->getOnlinePaymentAuthorize()->getPostProcess(
-            $this->POST->getArrayCopy(), 
             $this->GET->getArrayCopy(), 
+            $this->POST->getArrayCopy(), 
             $this->registry->get("k_http_Session")->get(), 
             $payment_target
         );
