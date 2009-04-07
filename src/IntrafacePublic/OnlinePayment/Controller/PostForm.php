@@ -28,15 +28,15 @@ class IntrafacePublic_OnlinePayment_Controller_PostForm extends k_Controller
         }
         
         $data['form'] = $this->getOnlinePaymentAuthorize()->getForm(
-            $payment_target['id'],
-            $payment_target['arrears'][$payment_target['default_currency']],
-            $payment_target['default_currency'],
-            'DK',
-            $receipt_url, 
-            $this->url('../'), 
-            $this->url('../postprocess'),
-            $this->GET->getArrayCopy(),
-            $this->POST->getArrayCopy()
+            $payment_target['id'], /* Order number */
+            $payment_target['arrears'][$payment_target['default_currency']], /* amount */
+            $payment_target['default_currency'], /* currency */
+            'DK', /* language */
+            $receipt_url,  /* okpage */
+            $this->url('../'),  /* errorpage */
+            $this->url('../postprocess'), /* resultpage */
+            $this->GET->getArrayCopy(), /* GET */
+            $this->POST->getArrayCopy() /* POST */
         );
         $data['secure_tunnel'] = $data['form']->getSecureTunnel();
         $data['creditcard_logos'] = array(
