@@ -1,6 +1,20 @@
 <?php
 class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
 {
+    function getPaymentTarget()
+    {
+        return $this->getOnlinePayment()->getPaymentTarget($this->name);
+    }
+
+    function isPaid()
+    {
+    	$payment_target = $this->getPaymentTarget();
+        if ($payment_target['payment_online'] >= $payment_target['arrears'][$payment_target['default_currency']]) {
+        	return true;
+        }
+        return false;
+    }
+
     function GET()
     {
         $onlinepayment = $this->getOnlinePayment();
@@ -29,9 +43,7 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
         $data['target_type']  = $payment_target['type'];
         $data['total_price']  = $payment_target['arrears'][$payment_target['default_currency']];
 
-        // @todo this makes sure that you are not presented with the page which sends you further to the payment
-        //       however the forward should probably also be closed if the payment has already been made
-        if ($payment_target['payment_online'] >= $payment_target['arrears'][$payment_target['default_currency']]) {
+        if ($this->isPaid()) {
             return $this->render('IntrafacePublic/OnlinePayment/templates/payment-alreadypaid.tpl.php', $data);
         }
 
@@ -45,6 +57,10 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
 
     public function forward($name)
     {
+        if ($this->isPaid()) {
+        	throw new k_http_Response(404);
+        }
+        
         // The provider payment server makes an http post call to the postprocess page.
         // This page then adds the payment to intraface.
         if ($name == 'postprocess') {

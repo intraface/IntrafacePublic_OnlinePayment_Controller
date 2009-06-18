@@ -1,2 +1,2 @@
-<h2><?php e(__('This order has already been paid')); ?></h2>
-<p><?php e(__('You cannot pay for this order twice.')); ?></p>
+<h2><?php e(__('This order has already been paid online')); ?></h2>
+<p><?php e(__('Apparently you have already paid this order online once. If you have any questions, you are welcome to contact us.')); ?></p>
