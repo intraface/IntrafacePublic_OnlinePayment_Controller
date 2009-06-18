@@ -9,24 +9,23 @@ class IntrafacePublic_OnlinePayment_Controller_PostForm extends k_Controller
 {
     public function GET()
     {
-        
-        if(false !== ($onlinepayment = $this->getOnlinePayment())) {
+
+        if (false !== ($onlinepayment = $this->getOnlinePayment())) {
             try {
                 $payment_target = $onlinepayment->getPaymentTarget($this->context->name);
             } catch (Exception $e) {
                 throw $e;
-            }    
-        }
-        else {
+            }
+        } else {
             throw new Exception('Onlinepayment object is not present. Root controller should have method getOnlinePayment');
         }
-        
-        if(isset($this->GET['receipturl'])) {
+
+        if (isset($this->GET['receipturl'])) {
             $receipt_url = $this->GET['receipturl'];
         } else {
             $receipt_url = $this->context->context->getOkUrl();
         }
-        
+
         $data['form'] = $this->getOnlinePaymentAuthorize()->getForm(
             $payment_target['id'], /* Order number */
             $payment_target['arrears'][$payment_target['default_currency']], /* amount */
@@ -51,25 +50,25 @@ class IntrafacePublic_OnlinePayment_Controller_PostForm extends k_Controller
 
         throw new k_http_Response(200, $response);
     }
-    
+
     public function POST()
     {
         return $this->GET();
     }
-    
+
     /**
      * Return Ilib_Payment_Authorize
-     * 
+     *
      * @return object Ilib_Payment_Authorize
      */
     public function getOnlinePaymentAuthorize()
     {
         return $this->context->getOnlinePaymentAuthorize();
     }
-    
+
     /**
      * Return IntrafacePublic_Onlinepayment
-     * 
+     *
      * @return object IntrafacePublic_OnlinePayment
      */
     public function getOnlinePayment()

@@ -1,7 +1,6 @@
 <?php
 class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
 {
-    
     function GET()
     {
         $onlinepayment = $this->getOnlinePayment();
@@ -24,18 +23,24 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
             $this->GET->getArrayCopy(),
             $this->POST->getArrayCopy()
         );
-        
+
         $data['order_number'] =  $payment_target['number'];
-        $data['date'] =  $payment_target['this_date'];
-        $data['target_type'] = $payment_target['type'];
-        $data['total_price'] = $payment_target['arrears'][$payment_target['default_currency']];
-       
+        $data['date']         =  $payment_target['this_date'];
+        $data['target_type']  = $payment_target['type'];
+        $data['total_price']  = $payment_target['arrears'][$payment_target['default_currency']];
+
+        // @todo this makes sure that you are not presented with the page which sends you further to the payment
+        //       however the forward should probably also be closed if the payment has already been made
+        if ($payment_target['payment_online'] >= $payment_target['arrears'][$payment_target['default_currency']]) {
+            return $this->render('IntrafacePublic/OnlinePayment/templates/payment-alreadypaid.tpl.php', $data);
+        }
+
         if (!empty($this->GET['error'])) {
             $data['error_message'] = $this->__('An error occured. Please try again');
         }
-        
+
         return $this->render('IntrafacePublic/OnlinePayment/templates/payment-forward-tpl.php', $data);
-        
+
     }
 
     public function forward($name)
@@ -46,7 +51,7 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
             $next = new IntrafacePublic_OnlinePayment_Controller_PostProcess($this, $name);
             return $next->handleRequest();
         }
-        
+
         // The post form page makes the post form to post to the payment server.
         if ($name == 'postform') {
             $next = new IntrafacePublic_OnlinePayment_Controller_PostForm($this, $name);
@@ -58,27 +63,27 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
             $next = new IntrafacePublic_OnlinePayment_Controller_Receipt($this, $name);
             return $next->handleRequest();
         }
-        
+
         // A payment process'er  for testing.
         if ($name == 'paymentprocess') {
             $next = new IntrafacePublic_OnlinePayment_Controller_PaymentProcess($this, $name);
             return $next->handleRequest();
         }
     }
-    
+
     /**
      * Return Ilib_Payment_Authorize
-     * 
+     *
      * @return object Ilib_Payment_Authorize
      */
     public function getOnlinePaymentAuthorize()
     {
         return $this->context->getOnlinePaymentAuthorize();
     }
-    
+
     /**
      * Return IntrafacePublic_Onlinepayment
-     * 
+     *
      * @return object IntrafacePublic_OnlinePayment
      */
     public function getOnlinePayment()
