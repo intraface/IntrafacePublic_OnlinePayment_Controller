@@ -187,7 +187,7 @@ div.errormesssage {color: red;margin: 20px 0px 20px 0px; }
             <legend><span><?php e(__('Company')); ?></span></legend>
             <div class="s4-inner">
                 <p class="stop"><strong><span><?php e(__('Total amount')); ?></span></strong>
-                <?php echo $form->getCurrency().' '.$form->getAmount(); ?></p>
+                <?php e($form->getCurrency().' '.$form->getAmount()->getAsLocale($this->document->locale, 2)); ?></p>
                 <!--
                 <p><strong><span><?php e(__('Order')); ?></span>xxx</strong></p>
                 -->

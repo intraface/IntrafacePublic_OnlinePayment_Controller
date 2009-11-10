@@ -3,6 +3,14 @@ class IntrafacePublic_OnlinePayment_Controller_Index extends k_Controller
 {
     private $error = array();
 
+    public function __construct($context, $name)
+    {
+        parent::__construct($context, $name);
+        
+        # We set locale to en_US as default.
+        if(empty($this->document->locale)) $this->document->locale = 'en_US';
+    }
+    
     /**
      * Returns the url to go to when payment is succeded.
      * Placed here makes it possible to overwrite the method in local contexts.
