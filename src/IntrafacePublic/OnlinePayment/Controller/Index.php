@@ -25,7 +25,7 @@ class IntrafacePublic_OnlinePayment_Controller_Index extends k_Controller
         throw new Exception('You need to specify an order to pay!');
     }
 
-    public public function forward($name)
+    public function forward($name)
     {
         $next = new IntrafacePublic_OnlinePayment_Controller_Show($this, $name);
         return $next->handleRequest();
@@ -35,7 +35,7 @@ class IntrafacePublic_OnlinePayment_Controller_Index extends k_Controller
     {
     	return $this->context->getCompanyInformation();
     }
-    
+
     /**
      * Return Ilib_Payment_Authorize
      */
@@ -43,7 +43,7 @@ class IntrafacePublic_OnlinePayment_Controller_Index extends k_Controller
     {
         return $this->context->getOnlinePaymentAuthorize();
     }
-    
+
     /**
      * Return IntrafacePublic_Onlinepayment
      */
