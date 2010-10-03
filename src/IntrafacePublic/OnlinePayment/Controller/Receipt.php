@@ -1,12 +1,12 @@
 <?php
 /**
- * The receipt page provides. 
+ * The receipt page provides.
  */
-class IntrafacePublic_OnlinePayment_Controller_Receipt extends k_Controller
+class IntrafacePublic_OnlinePayment_Controller_Receipt extends k_Component
 {
-    public function GET() 
+    public function renderHtml()
     {
-        return $this->__('We have recieved your payment! Have a nice day');
+        return 'We have recieved your payment! Have a nice day';
     }
 }
 

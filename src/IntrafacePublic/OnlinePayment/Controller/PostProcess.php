@@ -3,32 +3,32 @@
  * The provider payment server makes an http post call to the postprocess page.
  * This page then adds the payment to intraface.
  */
-class IntrafacePublic_OnlinePayment_Controller_PostProcess extends k_Controller
+class IntrafacePublic_OnlinePayment_Controller_PostProcess extends k_Component
 {
-    public function GET() 
+    public function renderHtml()
     {
-        return $this->POST();
+        return $this->postForm();
     }
-    
-    public function POST() 
+
+    public function postForm()
     {
         $onlinepayment = $this->getOnlinepayment();
-        
+
         try {
-            $payment_target = $onlinepayment->getPaymentTarget($this->context->name);
+            $payment_target = $onlinepayment->getPaymentTarget($this->context->name());
         } catch (Exception $e) {
             throw new Exception('Invalid payment target. Wrong url');
         }
-        
+
         $postprocess = $this->getOnlinePaymentAuthorize()->getPostProcess(
-            $this->GET->getArrayCopy(), 
-            $this->POST->getArrayCopy(), 
-            $this->registry->get("k_http_Session")->get(), 
+            $this->query(),
+            $this->body(),
+            $this->session()->get(),
             $payment_target
         );
         try {
             $onlinepayment->saveOnlinePayment(
-                $this->context->name, 
+                $this->context->name,
                 $postprocess->getTransactionNumber(),
                 $postprocess->getTransactionStatus(),
                 $postprocess->getPbsStatus(),
@@ -38,25 +38,24 @@ class IntrafacePublic_OnlinePayment_Controller_PostProcess extends k_Controller
             throw $e;
         }
     }
-    
+
     /**
      * Return Ilib_Payment_Authorize
-     * 
+     *
      * @return object Ilib_Payment_Authorize
      */
     public function getOnlinePaymentAuthorize()
     {
         return $this->context->getOnlinePaymentAuthorize();
     }
-    
+
     /**
      * Return IntrafacePublic_Onlinepayment
-     * 
+     *
      * @return object IntrafacePublic_OnlinePayment
      */
     public function getOnlinePayment()
     {
         return $this->context->getOnlinePayment();
     }
-    
 }

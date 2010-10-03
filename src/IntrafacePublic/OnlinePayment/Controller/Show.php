@@ -1,21 +1,43 @@
 <?php
-class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
+class IntrafacePublic_OnlinePayment_Controller_Show extends k_Component
 {
-    function getPaymentTarget()
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
     {
-        return $this->getOnlinePayment()->getPaymentTarget($this->name);
+        $this->template = $template;
     }
 
-    function isPaid()
+    public function map($name)
     {
-    	$payment_target = $this->getPaymentTarget();
-        if ($payment_target['payment_online'] >= $payment_target['arrears'][$payment_target['default_currency']]) {
-        	return true;
+        if ($this->isPaid()) {
+            throw new k_PageNotFound(404);
         }
-        return false;
+
+        // The provider payment server makes an http post call to the postprocess page.
+        // This page then adds the payment to intraface.
+        if ($name == 'postprocess') {
+            return 'IntrafacePublic_OnlinePayment_Controller_PostProcess';
+        }
+
+        // The post form page makes the post form to post to the payment server.
+        if ($name == 'postform') {
+            return 'IntrafacePublic_OnlinePayment_Controller_PostForm';
+        }
+
+        // Returns a confirmation that the payment was successfull
+        if ($name == 'receipt') {
+            return 'IntrafacePublic_OnlinePayment_Controller_Receipt';
+        }
+
+        // A payment process'er  for testing.
+        if ($name == 'paymentprocess') {
+            return 'IntrafacePublic_OnlinePayment_Controller_PaymentProcess';
+        }
     }
 
-    function GET()
+
+    function renderHtml()
     {
         $onlinepayment = $this->getOnlinePayment();
         try {
@@ -34,8 +56,8 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
             $this->url('.', array('error' => 1)),
             $this->url('./postprocess'),
             $this->url('./postform'),
-            $this->GET->getArrayCopy(),
-            $this->POST->getArrayCopy()
+            $this->query(),
+            $this->body()
         );
 
         $data['order_number'] =  $payment_target['number'];
@@ -44,47 +66,16 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
         $data['total_price']  = $payment_target['arrears'][$payment_target['default_currency']];
 
         if ($this->isPaid()) {
-            return $this->render('IntrafacePublic/OnlinePayment/templates/payment-alreadypaid.tpl.php', $data);
+            $tpl = $this->template->create('IntrafacePublic/OnlinePayment/templates/payment-alreadypaid');
+            return $tpl->render($this, $data);
         }
 
-        if (!empty($this->GET['error'])) {
-            $data['error_message'] = $this->__('An error occured. Please try again');
+        if ($this->query('error')) {
+            $data['error_message'] = 'An error occured. Please try again';
         }
 
-        return $this->render('IntrafacePublic/OnlinePayment/templates/payment-forward-tpl.php', $data);
-
-    }
-
-    public function forward($name)
-    {
-        if ($this->isPaid()) {
-        	throw new k_http_Response(404);
-        }
-        
-        // The provider payment server makes an http post call to the postprocess page.
-        // This page then adds the payment to intraface.
-        if ($name == 'postprocess') {
-            $next = new IntrafacePublic_OnlinePayment_Controller_PostProcess($this, $name);
-            return $next->handleRequest();
-        }
-
-        // The post form page makes the post form to post to the payment server.
-        if ($name == 'postform') {
-            $next = new IntrafacePublic_OnlinePayment_Controller_PostForm($this, $name);
-            return $next->handleRequest();
-        }
-
-        // Returns a confirmation that the payment was successfull
-        if ($name == 'receipt') {
-            $next = new IntrafacePublic_OnlinePayment_Controller_Receipt($this, $name);
-            return $next->handleRequest();
-        }
-
-        // A payment process'er  for testing.
-        if ($name == 'paymentprocess') {
-            $next = new IntrafacePublic_OnlinePayment_Controller_PaymentProcess($this, $name);
-            return $next->handleRequest();
-        }
+        $tpl = $this->template->create('IntrafacePublic/OnlinePayment/templates/payment-forward');
+        return $tpl->render($this, $data);
     }
 
     /**
@@ -111,5 +102,18 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Controller
     {
         return $this->context->getCompanyInformation();
     }
-}
 
+    function getPaymentTarget()
+    {
+        return $this->getOnlinePayment()->getPaymentTarget($this->name);
+    }
+
+    function isPaid()
+    {
+        $payment_target = $this->getPaymentTarget();
+        if ($payment_target['payment_online'] >= $payment_target['arrears'][$payment_target['default_currency']]) {
+            return true;
+        }
+        return false;
+    }
+}

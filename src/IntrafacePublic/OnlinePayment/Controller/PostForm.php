@@ -5,14 +5,20 @@
  * To create custom page with payment input fields.
  */
 
-class IntrafacePublic_OnlinePayment_Controller_PostForm extends k_Controller
+class IntrafacePublic_OnlinePayment_Controller_PostForm extends k_Component
 {
-    public function GET()
-    {
+    protected $template;
 
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
+    public function renderHtml()
+    {
         if (false !== ($onlinepayment = $this->getOnlinePayment())) {
             try {
-                $payment_target = $onlinepayment->getPaymentTarget($this->context->name);
+                $payment_target = $onlinepayment->getPaymentTarget($this->context->name());
             } catch (Exception $e) {
                 throw $e;
             }
@@ -20,22 +26,22 @@ class IntrafacePublic_OnlinePayment_Controller_PostForm extends k_Controller
             throw new Exception('Onlinepayment object is not present. Root controller should have method getOnlinePayment');
         }
 
-        if (isset($this->GET['receipturl'])) {
-            $receipt_url = $this->GET['receipturl'];
+        if ($this->query('receipturl')) {
+            $receipt_url = $this->query('receipturl');
         } else {
             $receipt_url = $this->context->context->getOkUrl();
         }
 
         $data['form'] = $this->getOnlinePaymentAuthorize()->getForm(
-            $payment_target['id'], /* Order number */
-            $payment_target['arrears'][$payment_target['default_currency']], /* amount */
-            $payment_target['default_currency'], /* currency */
-            'DK', /* language */
-            $receipt_url,  /* okpage */
-            $this->url('../'),  /* errorpage */
-            $this->url('../postprocess'), /* resultpage */
-            $this->GET->getArrayCopy(), /* GET */
-            $this->POST->getArrayCopy() /* POST */
+            $payment_target['id'], // Order number
+            $payment_target['arrears'][$payment_target['default_currency']], // amount
+            $payment_target['default_currency'], // currency
+            'DK', // language
+            $receipt_url,  // okpage
+            $this->url('../'),  // errorpage
+            $this->url('../postprocess'), // resultpage
+            $this->query(), // GET
+            $this->body() // POST
         );
         $data['secure_tunnel'] = $data['form']->getSecureTunnel();
         $data['creditcard_logos'] = array(
@@ -46,14 +52,15 @@ class IntrafacePublic_OnlinePayment_Controller_PostForm extends k_Controller
                 array('url' => $this->url('/images/creditcard-logo/maestro-s.gif'), 'width' => '32', 'height' => '20'),
                 array('url' => $this->url('/images/creditcard-logo/jcb-s.gif'), 'width' => '19', 'height' => '24'));
 
-        $response = $this->render('IntrafacePublic/OnlinePayment/templates/payment-form-tpl.php',  $data);
+        $tpl = $this->template->create('IntrafacePublic/OnlinePayment/templates/payment-form');
+        $response = $tpl->render($this,  $data);
 
-        throw new k_http_Response(200, $response);
+        throw new k_HttpResponse(200, $response);
     }
 
-    public function POST()
+    public function postForm()
     {
-        return $this->GET();
+        return $this->render();
     }
 
     /**
