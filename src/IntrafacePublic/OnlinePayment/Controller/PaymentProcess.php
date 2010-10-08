@@ -13,7 +13,7 @@ class IntrafacePublic_OnlinePayment_Controller_PaymentProcess extends k_Componen
         }
 
         $payment_process = $payment_authorize->getPaymentProcess();
-        $session = $this->session()->get();
+        $session = $this->session()->get(null);
 
         $url = $payment_process->process(
             $this->body(),
