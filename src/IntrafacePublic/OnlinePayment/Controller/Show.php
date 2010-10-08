@@ -41,7 +41,7 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Component
     {
         $onlinepayment = $this->getOnlinePayment();
         try {
-            $payment_target = $onlinepayment->getPaymentTarget($this->name);
+            $payment_target = $onlinepayment->getPaymentTarget($this->name());
         } catch (Exception $e) {
             throw $e;
         }
@@ -105,7 +105,7 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Component
 
     function getPaymentTarget()
     {
-        return $this->getOnlinePayment()->getPaymentTarget($this->name);
+        return $this->getOnlinePayment()->getPaymentTarget($this->name());
     }
 
     function isPaid()
