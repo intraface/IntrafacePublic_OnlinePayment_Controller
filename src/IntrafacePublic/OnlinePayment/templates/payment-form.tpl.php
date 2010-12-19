@@ -1,8 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title><?php e(__('Payment')); ?></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=<?php e($this->document->encoding); ?>" />
+    <title><?php e(t('Payment')); ?></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <style type="text/css">
 @charset "utf-8";
 /* CSS Document */
@@ -129,26 +129,26 @@ div.errormesssage {color: red;margin: 20px 0px 20px 0px; }
 
 
 <div id="outer">
-    <?php if (!empty($this->document->company_name)): ?>
-        <h1><a href="#"><?php e($this->document->company_name); ?><em></em></a></h1>
+    <?php if (!empty($context->document()->company_name)): ?>
+        <h1><a href="#"><?php e($context->document()->company_name); ?><em></em></a></h1>
     <?php else: ?>
-        <h1><?php e(__('Online payment')); ?></h1>
+        <h1><?php e(t('Online payment')); ?></h1>
     <?php endif; ?>
-        <div class="errormesssage"><?php if('' != ($errormessage = $form->getErrorMessage())) echo __($errormessage); ?></div>
+        <div class="errormesssage"><?php if('' != ($errormessage = $form->getErrorMessage())) echo t($errormessage); ?></div>
         <form action="<?php $url = $form->getAction(); if(substr($url, 0, 7) != 'http://' && substr($url, 0, 8) != 'https://') $url = url('../'.$url); echo $url; ?>" method="post" autocomplete="off" id="payment_details">
             <?php echo $form->getHiddenFields(); ?>
 
 
             <div class="s4top">
             <fieldset class="clearfix">
-            <legend><span><?php e(__('Card information')); ?></span></legend>
+            <legend><span><?php e(t('Card information')); ?></span></legend>
             <div class="s4-inner">
                 <div class="stop">
-                    <label for="cardnum"><?php e(__('Card number')); ?></label>
+                    <label for="cardnum"><?php e(t('Card number')); ?></label>
                     <input type="text" maxlength="16" size="19" name="<?php echo $form->getCardNumberFieldName(); ?>" id="cardnum" />
                 </div>
                 <div>
-                    <label for="month"><?php e(__('Expire date')); ?></label>
+                    <label for="month"><?php e(t('Expire date')); ?></label>
                     <span>
                 <select name="<?php echo $form->getExpireMonthFieldName(); ?>" class="s4-select" id="month">
                     <?php
@@ -170,11 +170,11 @@ div.errormesssage {color: red;margin: 20px 0px 20px 0px; }
                     </span>
                 </div>
                 <div>
-                    <label for="cvd"><?php e(__('Security no.')); ?></label>
+                    <label for="cvd"><?php e(t('Security no.')); ?></label>
                     <input type="text" maxlength="3" size="3" name="<?php echo $form->getSecurityNumberFieldName(); ?>" id="cvd" />
                 </div>
                 <div>
-                    <input class="godkend" name="submit" type="submit" id="submit" value="<?php e(__('Pay')); ?>" />
+                    <input class="godkend" name="submit" type="submit" id="submit" value="<?php e(t('Pay')); ?>" />
                 </div>
             </div>
             </fieldset>
@@ -184,24 +184,24 @@ div.errormesssage {color: red;margin: 20px 0px 20px 0px; }
 
 
 
-            <legend><span><?php e(__('Company')); ?></span></legend>
+            <legend><span><?php e(t('Company')); ?></span></legend>
             <div class="s4-inner">
-                <p class="stop"><strong><span><?php e(__('Total amount')); ?></span></strong>
-                <?php e($form->getCurrency().' '.$form->getAmount()->getAsLocale($this->document->locale, 2)); ?></p>
+                <p class="stop"><strong><span><?php e(t('Total amount')); ?></span></strong>
+                <?php e($form->getCurrency().' '.$form->getAmount()->getAsLocale($context->document()->locale(), 2)); ?></p>
                 <!--
-                <p><strong><span><?php e(__('Order')); ?></span>xxx</strong></p>
+                <p><strong><span><?php e(t('Order')); ?></span>xxx</strong></p>
                 -->
-                <p><span><?php e(__('Company')); ?></span> <b><?php e($this->getCompanyName()); ?><br />
-                    <?php e($this->getCompanyAddress()); ?><br />
-                    <?php e($this->getCompanyZip()); ?></b></p>
-                <p><span><?php e(__('Vat no.')); ?></span><?php e($this->getCompanyVatNumber()); ?></p>
+                <p><span><?php e(t('Company')); ?></span> <b><?php e($context->getCompanyName()); ?><br />
+                    <?php e($context->getCompanyAddress()); ?><br />
+                    <?php e($context->getCompanyZip()); ?></b></p>
+                <p><span><?php e(t('Vat no.')); ?></span><?php e($context->getCompanyVatNumber()); ?></p>
             </div>
             </fieldset>
         </div>
        </form>
         <div class="s4base">
             <fieldset class="clearfix">
-            <legend><span><?php e(__('Available cards')); ?></span></legend>
+            <legend><span><?php e(t('Available cards')); ?></span></legend>
                 <?php
                 if(isset($creditcard_logos) && is_array($creditcard_logos)) {
                     foreach($creditcard_logos as $logo) {
@@ -214,10 +214,10 @@ div.errormesssage {color: red;margin: 20px 0px 20px 0px; }
         <br />
         <div class="s4base">
             <fieldset class="clearfix">
-            <legend><span><?php e(__('Information on the card')); ?></span></legend>
-            <h3><?php e(__('Where can I find the security number?')); ?></h3>
-            <p><?php e(__('The security number can be found on the back of your card. The numbers can be placed in different places on different card types. The illustration below shows some different examples. The security number gives increased security when shopping online.')); ?></p>
-            <p class="security"><img src="<?php e($secure_tunnel.url('/images/security-num.jpg')); ?>" alt="<?php e(__('Security number')); ?>" width="450" height="108" /></p>
+            <legend><span><?php e(t('Information on the card')); ?></span></legend>
+            <h3><?php e(t('Where can I find the security number?')); ?></h3>
+            <p><?php e(t('The security number can be found on the back of your card. The numbers can be placed in different places on different card types. The illustration below shows some different examples. The security number gives increased security when shopping online.')); ?></p>
+            <p class="security"><img src="<?php e($secure_tunnel.url('/images/security-num.jpg')); ?>" alt="<?php e(t('Security number')); ?>" width="450" height="108" /></p>
             </fieldset>
         </div>
 </div>

@@ -4,7 +4,6 @@
  * The server gets the fields through a http call.
  * To create custom page with payment input fields.
  */
-
 class IntrafacePublic_OnlinePayment_Controller_PostForm extends k_Component
 {
     protected $template;
@@ -55,7 +54,7 @@ class IntrafacePublic_OnlinePayment_Controller_PostForm extends k_Component
         $tpl = $this->template->create('IntrafacePublic/OnlinePayment/templates/payment-form');
         $response = $tpl->render($this,  $data);
 
-        throw new k_HttpResponse(200, $response);
+        return new k_HttpResponse(200, $response);
     }
 
     public function postForm()
