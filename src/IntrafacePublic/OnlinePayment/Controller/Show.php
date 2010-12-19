@@ -47,7 +47,7 @@ class IntrafacePublic_OnlinePayment_Controller_Show extends k_Component
         }
 
         $data['prepare'] = $this->getOnlinePaymentAuthorize()->getPrepare(
-            $this->name,
+            $this->name(),
             $payment_target['id'],
             $payment_target['arrears'][$payment_target['default_currency']],
             $payment_target['default_currency'],
