@@ -28,7 +28,7 @@ class IntrafacePublic_OnlinePayment_Controller_PostProcess extends k_Component
         );
         try {
             $onlinepayment->saveOnlinePayment(
-                $this->context->name,
+                $this->context->name(),
                 $postprocess->getTransactionNumber(),
                 $postprocess->getTransactionStatus(),
                 $postprocess->getPbsStatus(),
