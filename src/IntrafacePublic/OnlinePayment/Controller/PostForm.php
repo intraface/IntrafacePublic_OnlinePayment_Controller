@@ -37,7 +37,7 @@ class IntrafacePublic_OnlinePayment_Controller_PostForm extends k_Component
             $payment_target['default_currency'], // currency
             'DK', // language
             $receipt_url,  // okpage
-            $this->url('../'),  // errorpage
+            $this->url('./'),  // errorpage
             $this->url('../postprocess'), // resultpage
             $this->query(), // GET
             $this->body() // POST
