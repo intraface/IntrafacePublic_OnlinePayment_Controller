@@ -15,7 +15,7 @@
         </tr>
         <tr>
             <th><?php e(t('Amount')); ?></th>
-            <td><?php e($prepare->getCurrency().' '.$prepare->getAmount()->getAsLocale($this->document->locale, 2)); ?></td>
+            <td><?php e($prepare->getCurrency().' '.$prepare->getAmount()->getAsLocale($context->document()->locale(), 2)); ?></td>
         </tr>
         </tbody>
     </table>
